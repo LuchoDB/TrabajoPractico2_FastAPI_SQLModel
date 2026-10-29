@@ -2,6 +2,8 @@ from datetime import date
 from typing import Annotated
 
 from fastapi import Depends
+
+# pyrefly: ignore[missing-import]
 from sqlmodel import Session
 
 from app.database import get_session

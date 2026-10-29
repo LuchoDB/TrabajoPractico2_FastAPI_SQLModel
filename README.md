@@ -20,13 +20,14 @@ tests/                 # pytest con base en memoria
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate        # en Windows: .venv\Scripts\activate
+.venv\Scripts\activate         # en Linux/MacOS: source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
 - Documentación interactiva (Swagger): http://127.0.0.1:8000/docs
 - La base es SQLite (`biblioteca.db`, se crea sola). Para usar otra: variable de entorno `DATABASE_URL`.
+- Una vez que se corra uvicorn, el enlace lleva directamente a la documentacion interactiva.
 
 ## Cómo testearlo
 

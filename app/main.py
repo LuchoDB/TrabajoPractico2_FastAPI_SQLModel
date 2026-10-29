@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 
 from app.database import crear_tablas
 from app.exceptions import (
@@ -30,6 +30,12 @@ app.include_router(autores.router)
 app.include_router(libros.router)
 app.include_router(socios.router)
 app.include_router(prestamos.router)
+
+
+@app.get("/", include_in_schema=False)
+def raiz():
+    return RedirectResponse(url="/docs")
+
 
 _STATUS_POR_ERROR = {
     NoEncontradoError: 404,

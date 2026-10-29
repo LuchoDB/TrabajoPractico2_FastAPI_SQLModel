@@ -1,7 +1,10 @@
 from datetime import date, timedelta
 
+# pyrefly: ignore[missing-import]
 import pytest
 from fastapi.testclient import TestClient
+
+# pyrefly: ignore[missing-import]
 from sqlmodel import Session, SQLModel
 
 from app import models  # noqa: F401  (registra las tablas)
@@ -45,7 +48,9 @@ def client(reloj):
 @pytest.fixture
 def crear_autor(client):
     def _crear(nombre="Julio Cortázar", nacionalidad="Argentina"):
-        r = client.post("/autores", json={"nombre": nombre, "nacionalidad": nacionalidad})
+        r = client.post(
+            "/autores", json={"nombre": nombre, "nacionalidad": nacionalidad}
+        )
         assert r.status_code == 201
         return r.json()
 
@@ -96,6 +101,8 @@ def crear_socio(client):
 @pytest.fixture
 def prestar(client):
     def _prestar(socio_id, libro_id):
-        return client.post("/prestamos", json={"socio_id": socio_id, "libro_id": libro_id})
+        return client.post(
+            "/prestamos", json={"socio_id": socio_id, "libro_id": libro_id}
+        )
 
     return _prestar

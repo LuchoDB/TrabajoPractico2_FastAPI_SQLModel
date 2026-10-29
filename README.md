@@ -39,32 +39,32 @@ pytest
 
 ## Endpoints
 
-| Método                          | Ruta                                  | Descripción                                             |
-| ------------------------------- | ------------------------------------- | ------------------------------------------------------- |
-| POST / GET / GET / PUT / DELETE | `/autores`, `/autores/{id}`           | CRUD de autores                                         |
-| POST / GET / GET / PUT / DELETE | `/libros`, `/libros/{id}`             | CRUD de libros (la respuesta incluye sus autores)       |
-| POST / GET / GET / PUT / DELETE | `/socios`, `/socios/{id}`             | CRUD de socios                                          |
-| POST                            | `/libros/{id}/autores/{autor_id}`     | Asocia un autor a un libro (idempotente)                |
-| GET                             | `/libros?disponibles=true`            | Libros con stock > 0 (`false`: sin stock)               |
-| POST                            | `/prestamos`                          | Registra un préstamo (`{"socio_id": 1, "libro_id": 1}`) |
-| POST                            | `/prestamos/{id}/devolucion`          | Registra una devolución (también acepta `/devolución`)  |
-| GET                             | `/socios/{id}/prestamos?activos=true` | Préstamos activos del socio                             |
-| GET                             | `/prestamos`, `/prestamos/{id}`       | Consulta de préstamos                                   |
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST / GET / GET / PUT / DELETE | `/autores`, `/autores/{id}` | CRUD de autores |
+| POST / GET / GET / PUT / DELETE | `/libros`, `/libros/{id}` | CRUD de libros (la respuesta incluye sus autores) |
+| POST / GET / GET / PUT / DELETE | `/socios`, `/socios/{id}` | CRUD de socios |
+| POST | `/libros/{id}/autores/{autor_id}` | Asocia un autor a un libro (idempotente) |
+| GET | `/libros?disponibles=true` | Libros con stock > 0 (`false`: sin stock) |
+| POST | `/prestamos` | Registra un préstamo (`{"socio_id": 1, "libro_id": 1}`) |
+| POST | `/prestamos/{id}/devolucion` | Registra una devolución (también acepta `/devolución`) |
+| GET | `/socios/{id}/prestamos?activos=true` | Préstamos activos del socio |
+| GET | `/prestamos`, `/prestamos/{id}` | Consulta de préstamos |
 
 `PUT` acepta campos parciales: solo se modifican los que se envían.
 
 ## Reglas de negocio
 
-| #   | Regla                                                                                    | Error |
-| --- | ---------------------------------------------------------------------------------------- | ----- |
-| 1   | Un socio no puede tener más de 3 préstamos activos                                       | 409   |
-| 2   | No se presta un libro sin stock; al prestar se descuenta 1                               | 409   |
-| 3   | Un socio inactivo no puede pedir préstamos                                               | 403   |
-| 4   | `fecha_vencimiento = fecha_prestamo + 14 días`                                           | —     |
-| 5   | Al devolver se repone el stock y la multa es $100 × días de atraso (0 si llegó a tiempo) | —     |
-| 6   | No se puede devolver un préstamo ya devuelto                                             | 409   |
-| 7   | Recurso inexistente                                                                      | 404   |
-| 8   | ISBN o email duplicado                                                                   | 409   |
+| # | Regla | Error |
+|---|---|---|
+| 1 | Un socio no puede tener más de 3 préstamos activos | 409 |
+| 2 | No se presta un libro sin stock; al prestar se descuenta 1 | 409 |
+| 3 | Un socio inactivo no puede pedir préstamos | 403 |
+| 4 | `fecha_vencimiento = fecha_prestamo + 14 días` | — |
+| 5 | Al devolver se repone el stock y la multa es $100 × días de atraso (0 si llegó a tiempo) | — |
+| 6 | No se puede devolver un préstamo ya devuelto | 409 |
+| 7 | Recurso inexistente | 404 |
+| 8 | ISBN o email duplicado | 409 |
 
 Todas viven en `app/services/prestamo_service.py` (préstamos) y en los servicios de libros y socios (duplicados). Orden de validación al prestar: existencia (404) → socio activo (403) → tope de 3 (409) → stock (409).
 

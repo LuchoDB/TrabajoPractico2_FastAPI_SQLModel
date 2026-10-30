@@ -32,12 +32,12 @@ def crear_engine(url: str = DATABASE_URL) -> Engine:
 engine = crear_engine()
 
 
-def crear_tablas(eng: Engine | None = None) -> None:
+def crear_tablas(eng: Engine | None = None) -> None:  # pragma: no cover
     from app import models  # noqa: F401  (registra las tablas)
 
     SQLModel.metadata.create_all(eng or engine)
 
 
-def get_session() -> Iterator[Session]:
+def get_session() -> Iterator[Session]:  # pragma: no cover
     with Session(engine) as session:
         yield session

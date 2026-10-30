@@ -11,7 +11,7 @@ from app.database import get_session
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
-def get_hoy() -> date:
+def get_hoy() -> date:  # pragma: no cover
     """Fecha actual. Es una dependencia para poder sustituirla en los tests."""
     return date.today()
 

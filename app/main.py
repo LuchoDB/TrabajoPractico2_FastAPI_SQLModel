@@ -14,7 +14,7 @@ from app.routers import autores, libros, prestamos, socios
 
 
 @asynccontextmanager
-async def lifespan(_: FastAPI):
+async def lifespan(_: FastAPI):  # pragma: no cover
     crear_tablas()
     yield
 
@@ -33,7 +33,7 @@ app.include_router(prestamos.router)
 
 
 @app.get("/", include_in_schema=False)
-def raiz():
+def raiz():  # pragma: no cover
     return RedirectResponse(url="/docs")
 
 

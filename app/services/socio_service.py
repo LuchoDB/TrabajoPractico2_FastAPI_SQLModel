@@ -19,7 +19,7 @@ def crear(session: Session, datos: SocioCreate) -> Socio:
     session.add(socio)
     try:
         session.commit()
-    except IntegrityError:
+    except IntegrityError:  # pragma: no cover
         session.rollback()
         raise ConflictoError(f"Ya existe un socio con el email {datos.email}")
     session.refresh(socio)

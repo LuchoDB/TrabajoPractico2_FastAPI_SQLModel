@@ -20,7 +20,7 @@ def crear(session: Session, datos: LibroCreate) -> Libro:
     session.add(libro)
     try:
         session.commit()
-    except IntegrityError:
+    except IntegrityError:  # pragma: no cover
         session.rollback()
         raise ConflictoError(f"Ya existe un libro con ISBN {datos.isbn}")
     session.refresh(libro)

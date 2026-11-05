@@ -9,6 +9,17 @@ def test_crud_socio(client):
 
     r = client.put(f"/socios/{socio['id']}", json={"activo": False})
     assert r.status_code == 200 and r.json()["activo"] is False
+    assert r.json()["nombre"] == "Ana"
+    assert r.json()["email"] == "ana@mail.com"
+
+    r = client.put(
+        f"/socios/{socio['id']}",
+        json={"nombre": "Ana María", "email": None, "activo": None},
+    )
+    assert r.status_code == 200
+    assert r.json()["nombre"] == "Ana María"
+    assert r.json()["email"] == "ana@mail.com"
+    assert r.json()["activo"] is False
 
     assert client.delete(f"/socios/{socio['id']}").status_code == 204
     assert client.get(f"/socios/{socio['id']}").status_code == 404

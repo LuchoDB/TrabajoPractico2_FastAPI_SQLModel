@@ -27,7 +27,8 @@ def obtener(session: Session, autor_id: int) -> Autor:
 
 def actualizar(session: Session, autor_id: int, datos: AutorUpdate) -> Autor:
     autor = obtener(session, autor_id)
-    autor.sqlmodel_update(datos.model_dump(exclude_unset=True))
+    cambios = datos.model_dump(exclude_unset=True, exclude_none=True)
+    autor.sqlmodel_update(cambios)
     session.add(autor)
     session.commit()
     session.refresh(autor)

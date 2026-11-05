@@ -1,6 +1,6 @@
-from typing import List
+from typing import Annotated, List
 
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Body, Response, status
 
 from app.dependencies import SessionDep
 from app.models import AutorCreate, AutorRead, AutorUpdate
@@ -25,7 +25,11 @@ def obtener_autor(autor_id: int, session: SessionDep):
 
 
 @router.put("/{autor_id}", response_model=AutorRead)
-def actualizar_autor(autor_id: int, datos: AutorUpdate, session: SessionDep):
+def actualizar_autor(
+    autor_id: int,
+    datos: Annotated[AutorUpdate, Body(examples=[{}])],
+    session: SessionDep,
+):
     return autor_service.actualizar(session, autor_id, datos)
 
 

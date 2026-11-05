@@ -10,6 +10,18 @@ def test_crud_libro(client):
 
     r = client.put(f"/libros/{libro['id']}", json={"stock": 5})
     assert r.status_code == 200 and r.json()["stock"] == 5
+    assert r.json()["titulo"] == "Ficciones"
+    assert r.json()["isbn"] == "111"
+    assert r.json()["anio"] == 1944
+
+    r = client.put(
+        f"/libros/{libro['id']}",
+        json={"titulo": None, "isbn": None, "stock": 8, "anio": None},
+    )
+    assert r.status_code == 200 and r.json()["stock"] == 8
+    assert r.json()["titulo"] == "Ficciones"
+    assert r.json()["isbn"] == "111"
+    assert r.json()["anio"] == 1944
 
     assert client.delete(f"/libros/{libro['id']}").status_code == 204
     assert client.get(f"/libros/{libro['id']}").status_code == 404

@@ -1,6 +1,6 @@
-from typing import List, Optional
+from typing import Annotated, List, Optional
 
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Body, Response, status
 
 from app.dependencies import SessionDep
 from app.models import LibroCreate, LibroRead, LibroUpdate
@@ -26,7 +26,11 @@ def obtener_libro(libro_id: int, session: SessionDep):
 
 
 @router.put("/{libro_id}", response_model=LibroRead)
-def actualizar_libro(libro_id: int, datos: LibroUpdate, session: SessionDep):
+def actualizar_libro(
+    libro_id: int,
+    datos: Annotated[LibroUpdate, Body(examples=[{}])],
+    session: SessionDep,
+):
     return libro_service.actualizar(session, libro_id, datos)
 
 

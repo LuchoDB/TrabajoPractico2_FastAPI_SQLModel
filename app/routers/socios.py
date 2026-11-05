@@ -1,6 +1,6 @@
-from typing import List, Optional
+from typing import Annotated, List, Optional
 
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Body, Response, status
 
 from app.dependencies import SessionDep
 from app.models import PrestamoRead, SocioCreate, SocioRead, SocioUpdate
@@ -25,7 +25,11 @@ def obtener_socio(socio_id: int, session: SessionDep):
 
 
 @router.put("/{socio_id}", response_model=SocioRead)
-def actualizar_socio(socio_id: int, datos: SocioUpdate, session: SessionDep):
+def actualizar_socio(
+    socio_id: int,
+    datos: Annotated[SocioUpdate, Body(examples=[{}])],
+    session: SessionDep,
+):
     return socio_service.actualizar(session, socio_id, datos)
 
 
@@ -36,6 +40,8 @@ def eliminar_socio(socio_id: int, session: SessionDep):
 
 
 @router.get("/{socio_id}/prestamos", response_model=List[PrestamoRead])
-def prestamos_del_socio(socio_id: int, session: SessionDep, activos: Optional[bool] = None):
+def prestamos_del_socio(
+    socio_id: int, session: SessionDep, activos: Optional[bool] = None
+):
     """`?activos=true` devuelve solo los préstamos sin devolver."""
     return prestamo_service.listar_por_socio(session, socio_id, activos)

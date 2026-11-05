@@ -12,6 +12,13 @@ def test_crud_autor(client):
     assert r.json()["nacionalidad"] == "AR"
     assert r.json()["nombre"] == "Borges"  # no tocado
 
+    r = client.put(
+        f"/autores/{autor['id']}", json={"nombre": "Jorge Luis Borges", "nacionalidad": None}
+    )
+    assert r.status_code == 200
+    assert r.json()["nombre"] == "Jorge Luis Borges"
+    assert r.json()["nacionalidad"] == "AR"  # null no pisa el valor actual
+
     assert client.delete(f"/autores/{autor['id']}").status_code == 204
     assert client.get(f"/autores/{autor['id']}").status_code == 404
 

@@ -1,10 +1,12 @@
-from app.models.prestamo import Prestamo
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.models.autor import Autor, AutorRead
 from app.models.link import LibroAutor
+
+if TYPE_CHECKING:
+    from app.models.prestamo import Prestamo
 
 
 class LibroBase(SQLModel):

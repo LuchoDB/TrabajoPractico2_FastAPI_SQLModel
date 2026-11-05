@@ -39,7 +39,7 @@ def obtener(session: Session, socio_id: int) -> Socio:
 
 def actualizar(session: Session, socio_id: int, datos: SocioUpdate) -> Socio:
     socio = obtener(session, socio_id)
-    cambios = {k: v for k, v in datos.model_dump(exclude_unset=True).items() if v is not None}
+    cambios = datos.model_dump(exclude_unset=True, exclude_none=True)
     if "email" in cambios:
         cambios["email"] = str(cambios["email"])
         _verificar_email_libre(session, cambios["email"], excepto_id=socio.id)

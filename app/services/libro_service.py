@@ -8,7 +8,9 @@ from app.models import Libro, LibroCreate, LibroUpdate, Prestamo
 from app.services import autor_service
 
 
-def _verificar_isbn_libre(session: Session, isbn: str, excepto_id: Optional[int] = None) -> None:
+def _verificar_isbn_libre(
+    session: Session, isbn: str, excepto_id: Optional[int] = None
+) -> None:
     existente = session.exec(select(Libro).where(Libro.isbn == isbn)).first()
     if existente is not None and existente.id != excepto_id:
         raise ConflictoError(f"Ya existe un libro con ISBN {isbn}")
@@ -27,7 +29,7 @@ def crear(session: Session, datos: LibroCreate) -> Libro:
     return libro
 
 
-def listar(session: Session, disponibles: Optional[bool] = None) -> Sequence[Libro]:
+def listar(session: Session, disponibles: bool | None = None) -> Sequence[Libro]:
     consulta = select(Libro).order_by(Libro.id)
     if disponibles is True:
         consulta = consulta.where(Libro.stock > 0)
@@ -45,11 +47,9 @@ def obtener(session: Session, libro_id: int) -> Libro:
 
 def actualizar(session: Session, libro_id: int, datos: LibroUpdate) -> Libro:
     libro = obtener(session, libro_id)
-    cambios = datos.model_dump(exclude_unset=True)
-    if "isbn" in cambios and cambios["isbn"] is not None:
+    cambios = datos.model_dump(exclude_unset=True, exclude_none=True)
+    if "isbn" in cambios:
         _verificar_isbn_libre(session, cambios["isbn"], excepto_id=libro.id)
-    # Un None explícito no puede pisar campos obligatorios.
-    cambios = {k: v for k, v in cambios.items() if v is not None}
     libro.sqlmodel_update(cambios)
     session.add(libro)
     session.commit()

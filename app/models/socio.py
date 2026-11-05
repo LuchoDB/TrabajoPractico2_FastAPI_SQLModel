@@ -1,8 +1,10 @@
-from app.models.prestamo import Prestamo
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from app.models.prestamo import Prestamo
 
 
 class SocioBase(SQLModel):
